@@ -45,6 +45,15 @@ export default {
         },
       ]
     }],
+    ['vue-currency-filter/nuxt', {
+      symbol: '$',
+      thousandsSeparator: ',',
+      fractionCount: 2,
+      fractionSeparator: '.',
+      symbolPosition: 'front',
+      symbolSpacing: false,
+      avoidEmptyDecimals: undefined
+    }]
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
