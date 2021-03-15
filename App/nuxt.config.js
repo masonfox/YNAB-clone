@@ -42,8 +42,8 @@ export default {
   },
   watchers: {
     // add HMR support for docker container dev env
-    webpack:{
-      poll: true
-    }
+    // webpack:{
+    //   poll: true
+    // }
   }
 }
