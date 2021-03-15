@@ -18,7 +18,7 @@
                     <button type="button" aria-haspopup="listbox" aria-expanded="true" aria-labelledby="listbox-label" class="relative w-64 bg-white border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none sm:text-sm" @click="toggleBudgetSelector">
                     <span class="inline-flex truncate">
                         <span class="truncate">
-                            Q1 2021 Budget
+                            {{ activeBudget.name }}
                         </span>
                     </span>
                     <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -46,29 +46,29 @@
 
                     Highlighted: "text-white bg-indigo-600", Not Highlighted: "text-gray-900"
                     -->
-                    <li id="listbox-item-0" role="option" class="text-gray-900 cursor-default select-none relative py-2 pl-3 pr-9">
-                    <div class="flex">
-                        <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                        <span class="font-normal truncate">
-                        Wade Cooper
-                        </span>
-                        <!-- Highlighted: "text-indigo-200", Not Highlighted: "text-gray-500" -->
-                        <span class="ml-2 text-gray-500 truncate">
-                        @wadecooper
-                        </span>
-                    </div>
+                    <li role="option" v-for="budget in budgets" :key="budget.id" @click="setActiveBudget(budget.id)" class="text-gray-900 cursor-default select-none relative hover:bg-gray-100 py-2 pl-3 pr-9">
+                        <div class="flex items-center">
+                            <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
+                            <span class="font-normal truncate">
+                                {{ budget.name }}
+                            </span>
+                            <!-- Highlighted: "text-indigo-200", Not Highlighted: "text-gray-500" -->
+                            <span class="ml-2 text-gray-500 text-xs truncate">
+                                Updated - X
+                            </span>
+                        </div>
 
-                    <!--
-                        Checkmark, only display for selected option.
+                        <!--
+                            Checkmark, only display for selected option.
 
-                        Highlighted: "text-white", Not Highlighted: "text-indigo-600"
-                    -->
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-4">
-                        <!-- Heroicon name: solid/check -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
+                            Highlighted: "text-white", Not Highlighted: "text-indigo-600"
+                        -->
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-4" v-show="budget.id == activeBudgetId">
+                            <!-- Heroicon name: solid/check -->
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
                     </li>
 
                     <!-- More items... -->
@@ -82,8 +82,8 @@
                     <fa icon="chevron-left" class="text-sm" />
                 </button>
                 <button type="button" class="month-display w-32 font-medium border-l-0">
-                    <span class="text-gray-600 mr-.05">March 2021</span>
-                    <fa icon="caret-down" />
+                    <span class="text-gray-600">March 2021</span>
+                    <fa icon="caret-down" class="" />
                 </button>
                 <button type="button" class="rounded-r-md">
                     <fa icon="chevron-right" class="text-sm" />
@@ -105,9 +105,24 @@ export default {
             budgetSelectorVisible: false
         }
     },
+    computed: {
+        activeBudgetId () {
+            return this.$store.state.activeBudgetId
+        },
+        activeBudget () {
+            return this.$store.getters.getActiveBudget
+        },
+        budgets () {
+            return this.$store.state.budgets
+        }
+    },
     methods: {
         toggleBudgetSelector () {
             this.budgetSelectorVisible = !this.budgetSelectorVisible
+        },
+        setActiveBudget (id) {
+            this.$store.commit('setActiveBudgetId', id)
+            this.toggleBudgetSelector()
         }
     }
 }
